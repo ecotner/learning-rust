@@ -1,4 +1,4 @@
-use std::io::{self, Write};
+use std::io::{self, Write}; // Write is required by .flush()
 
 fn main() {
     print!("Enter your weight in kg (on Earth): ");
