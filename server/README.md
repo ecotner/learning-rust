@@ -61,6 +61,7 @@ It will have 3 components:
 * rust has `while <condition> {...}` loop; if we want to loop forever, we can use `loop {...}`
 * also supports `break` to exit a loop or `continue` to skip an iteration
     * can also "name" loops with a label (via an apostrophe like `'loop_name loop {...}`) and refer to specific loop when using `break/continue 'loop_name`
+* also has python-like `for` loop capabilities; can iterate over ranges `n..m`, or arrays `[1, 2, 3, 4, ...]`, or other things that implement an `Iterator` interface?
 
 ## Tuples
 * can be used to handle multiple objects at the same time
@@ -90,3 +91,19 @@ It will have 3 components:
 * in the `std::net` crate, there is a `TcpListener` struct that can listen on a socket using the `TcpListener::bind(addr)` method
 * the listener returns a `(TcpStream, SocketAddr)` tuple; and we can use the stream to read raw bytes into a buffer with `stream.read(&mut buffer)`
 * the buffer is a `[u8]` array; in order to convert this to UTF8, we can use `String::from_utf8_lossy(&buffer)` (we use the _lossy_ one to replace corrupted characters with � without throwing an error)
+
+## Traits
+* traits are a way to extend types that were defined elsewhere
+* we can use the `TryFrom` trait to extend our `Request` object to allow us to convert our byte array into a `Request` struct
+* define a trait with `trait TraitName {...}`
+    * can use generics to specify optional types `trait TraitName<T> {...}` or specify in the body `trait TraitName {type T; ...}`
+* can also define functions in the trait body that specify a _contract_ that any implementation of the trait must follow
+    * can implement the trait with `impl TraitName for StructName {...}`; this MUST define a concrete implementation of the functions specified in the trait definition
+
+## Custom errors
+* can define custom errors by implementing the `Error` trait for a specific struct like `impl Error for CustomErrorName {}`
+    * implementing `Error` will also require that you implement the `Display` and `Debug` traits as well
+    * these two traits require defining a `fmt` method that basically takes a formatter object and uses it to format a string (use the `write!` macro for this)
+* can convert between error types by implementing a `From<E>` trait for the error type you want to convert to
+    * then you can use the `?` operator to auto-convert the error type and return the new one if one is produced, otherwise return the value contained in the `Result`
+        * e.g. `Result<int, Error>(5)?` will return 5 if the variant is `Ok`, otherwise will break control flow early and return an `Error`
