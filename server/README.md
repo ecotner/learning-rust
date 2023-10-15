@@ -107,3 +107,31 @@ It will have 3 components:
 * can convert between error types by implementing a `From<E>` trait for the error type you want to convert to
     * then you can use the `?` operator to auto-convert the error type and return the new one if one is produced, otherwise return the value contained in the `Result`
         * e.g. `Result<int, Error>(5)?` will return 5 if the variant is `Ok`, otherwise will break control flow early and return an `Error`
+    
+## Iterators
+* rust supports the concept of iterators, which are structs that implement a `next()` method that returns the next element in the iterator, or `Option::None` if there are no more elements
+* can iterate over an iterator using a for loop: `for val in iterator {...}`
+    * if we want to get the index of the element we can also do `for (i, val) in iterator.enumerate() {...}`
+* to iterate over the characters of a string, we can call `string_var.chars()`
+
+## If let
+* rust has some syntax that will let you do pattern matching in an `if` statement: `if let pattern = variable {... body can use <pattern> variable ...}`
+* is useful if you need to do a `match` but only care about some of the variants
+
+## Lifetimes
+* in languages that allow pointers, it is sometimes possible to cause a "use after free" error, where some part of your code tries to read data on the heap that has been deallocated
+* in a garbage-collected language, this never happens because as long as there is a reference to some variable, it will not be collected
+* rust doesn't have a garbage collector, but can ensure this never happens at compile time by analyzing the "lifetimes" of your variables to ensure that references to a variable don't "live" longer than the variable itself
+* the compiler can't figure this out on its own though, so we have to provide "lifetime annotations"
+    * annotations are specified with an apostrophe followed by the lifetime name, e.g. `'my_lifetime` (many people use simple, single-character names like `'a` or `'b` in their code)
+* you can annotate variables with `&'a var`, and structs, traits, and functions, etc with `<'a>`
+    * implementations of structs that have a lifetime annotated must annotate the `impl` keyword: `impl<'a> Trait for Struct<'a> {...}`
+* what this does is tell the compiler that specific variables are related to each other in terms of memory, NOT that we are specifying explicit lifetimes
+
+## Hashmap and vector
+* rust has some cool higher-level collection data structures that are part of the `std::collections` crate
+* there is a `HashMap<K,V>` that creates a hash map from type `K` to value `V`
+    * has some useful methods like `.get` and `.entry`
+* there's also a `Vector<T>` that creates a dynamic-size array of type `T`
+    * can use `.push` to append new elements
+    * there is a convenience macro `vec![a, b, c, ...]` that will automatically create a vector with elements `a`, `b`, `c`, etc.

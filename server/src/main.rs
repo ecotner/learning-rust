@@ -1,3 +1,6 @@
+// silence some compiler warnings; #![...] annotates code for the compiler
+#![allow(dead_code)]
+
 // pull the Request/Server structs from their respective namespaces
 // use http::Request;
 // use http::Method;
