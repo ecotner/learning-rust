@@ -7,6 +7,7 @@ use super::QueryString;
 
 // this is generic over a lifetime; the request is pointing into the string
 // buffer, so we need to make sure the buffer lasts as long as the Request
+#[derive(Debug)]
 pub struct Request<'buf> {
     path: &'buf str,
     query_string: Option<QueryString<'buf>>,
@@ -54,7 +55,7 @@ impl<'buf> TryFrom<&'buf [u8]> for Request<'buf> {
 
 fn get_next_word(request: &str) -> Option<(&str, &str)> {
     for (i, c) in request.chars().enumerate() {
-        if c == ' ' || c == '\r' {
+        if c == ' ' || c == '\r' || c == '\n' {
             return Some((&request[..i], &request[(i+1)..]))
         }
     }

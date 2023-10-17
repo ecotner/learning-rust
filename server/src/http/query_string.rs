@@ -8,11 +8,13 @@ like '?b=1&b=2'. So we need to handle all these cases.
 use std::collections::HashMap;
 use std::convert::From;
 
+#[derive(Debug)]
 pub struct QueryString<'buf> {
     data: HashMap<&'buf str, Value<'buf>>
 }
 
 // Represents the value of the query string map
+#[derive(Debug)]
 pub enum Value<'buf> {
     Single(&'buf str), // it's possible that there is a single value...
     Multiple(Vec<&'buf str>), // or multiple values for the same key

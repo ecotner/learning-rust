@@ -135,3 +135,11 @@ It will have 3 components:
 * there's also a `Vector<T>` that creates a dynamic-size array of type `T`
     * can use `.push` to append new elements
     * there is a convenience macro `vec![a, b, c, ...]` that will automatically create a vector with elements `a`, `b`, `c`, etc.
+
+## Attributes (particularly the `derive` one)
+* attributes are some kind of metadata that is used by the compiler to do special things
+* we can prepend a data structure with `#[derive(Debug)]` on the line above it in order to implement the `Debug` trait for the struct automatically
+* then we can use the `dgb!(...)` macro to easily print debug information
+* if the struct has any members that themselves need to implement `Debug`, we can sprinkle the attribute across the structs that need it
+* notice that the `#[...]` is missing the bang like in the `#![allow(dead_code)]` we used earlier to silence the linter
+    * the bang means that the attribute applies to everything the attribute is declared _within_, while attributes without a bang apply only to whatever immediately follows

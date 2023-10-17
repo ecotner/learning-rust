@@ -33,9 +33,10 @@ impl Server {
                         Ok(_) => {
                             // convert the [u8] buffer to a string and print
                             let request_str = String::from_utf8_lossy(&buffer);
-                            println!("Received a request: {}", request_str);
                             match Request::try_from(&buffer[..]) {
-                                Ok(request) => {},
+                                Ok(request) => {
+                                    dbg!(request);
+                                },
                                 Err(e) => println!("Failed to parse a request {}", e)
                             }
                         },

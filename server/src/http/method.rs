@@ -1,6 +1,7 @@
 use std::str::FromStr;
 
 // enum that contains all possible HTTP methods (verbs)
+#[derive(Debug)]
 pub enum Method {
     GET,
     POST,
