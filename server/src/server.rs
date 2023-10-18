@@ -1,7 +1,16 @@
 use std::net::TcpListener;
-use std::io::{Write, Read};
+use std::io::Read;
 use crate::http::status_code::StatusCode;
-use crate::http::{Request, Response}; // crate keyword refers to the "root" of the module
+use crate::http::{Request, Response, ParseError}; // crate keyword refers to the "root" of the module
+
+pub trait Handler {
+    fn handle_request(&mut self, request: &Request) -> Response;
+
+    fn handle_bad_request(&mut self, e: &ParseError) -> Response {
+        println!("Failed to parse a request {}", e);
+        Response::new(StatusCode::BadRequest, Option::None)
+    }
+}
 
 // a struct that holds data about the server
 pub struct Server {
@@ -17,7 +26,7 @@ impl Server {
         Self { addr } // shorthand for above line
     }
 
-    pub fn run(self) {
+    pub fn run(self, mut handler: impl Handler) {
         println!("Listening on {}", self.addr);
 
         // listens to a TCP socket; if there's an error, end the program
@@ -34,16 +43,16 @@ impl Server {
                             // convert the [u8] buffer to a request struct (see the TryFrom impl)
                             let response = match Request::try_from(&buffer[..]) {
                                 Ok(request) => {
-                                    dbg!(request);
-                                    Response::new(
-                                        StatusCode::Ok,
-                                        Option::Some(String::from("<h1>It works!</h1>"))
-                                    )
+                                    handler.handle_request(&request)
+                                    // dbg!(request);
+                                    // Response::new(
+                                    //     StatusCode::Ok,
+                                    //     Option::Some(String::from("<h1>It works!</h1>"))
+                                    // )
                                 },
                                 Err(e) => {
-                                    println!("Failed to parse a request {}", e);
                                     // create response for failed requests
-                                    Response::new(StatusCode::BadRequest, Option::None)
+                                    handler.handle_bad_request(&e)
                                 }
                             };
                             if let Err(e) = response.send(&mut stream) {

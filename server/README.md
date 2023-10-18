@@ -149,3 +149,17 @@ It will have 3 components:
 * If the data is a simple type that lives on the stack like an integer, it can be _copied_, but if it is a complex type that lives on the heap, it must be _cloned_ (basically a deep copy)
 * can do this by implementing the `Copy` and/or `Clone` traits on a struct
 * beware though that copying/cloning data can potentially be wasteful if it is done haphazardly; often it is better to keep track of references to data instead of copying the values
+
+## Dynamic and static dispatch
+* the `send` function we implemented earlier accepts a `TcpStream` as an argument and writes some data to it, but what if we wanted to generalize the function so that it accepted any struct that implemented the `Write` trait?
+* one way to do that is replace `TcpStream` with `dyn Write`, where the `dyn` refers to "dynamic dispatch"
+    * at runtime, the program will look up the implementation of the `write!` function for the type that we passed in (using something as a v-table)
+    * this adds a bit of overhead due to the lookup, and can slow things down if this is done in a hot path
+* another way to do it is to replace `TcpStream` with `impl Write`; this utilizes "static dispatch"
+    * now multiple functions will be created at compile time and will be called appropriately at runtime
+    * this can be much faster, but comes at the cost of a larger binary size
+
+## Custom traits
+* we can create a custom trait using `trait TraitName {...}`
+* in the body we put the function signatures of the methods we want implementors of the trait to implement
+* if we want a default implementation, we can put that in the body of the methods, and then trait implementations can optionally overwrite them
