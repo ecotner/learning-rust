@@ -2,10 +2,13 @@
 
 Building a functional (but perhaps not super performant) web server.
 The server uses the `HTTP/1.1` protocol.
-It will have 3 components:
+It has 3 components:
+
 * TCP listener (sends/receives TCP data)
 * HTTP parser (parses the HTTP messages)
 * handler (handles the message data and decides what to do with it)
+
+To get it up and running, simply run `cargo run` and navigate to [http://127.0.0.1:8080](http://127.0.0.1:8080) in your browser
 
 ## Structs
 * use `struct StructName {...}` to define struct
