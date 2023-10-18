@@ -143,3 +143,9 @@ It will have 3 components:
 * if the struct has any members that themselves need to implement `Debug`, we can sprinkle the attribute across the structs that need it
 * notice that the `#[...]` is missing the bang like in the `#![allow(dead_code)]` we used earlier to silence the linter
     * the bang means that the attribute applies to everything the attribute is declared _within_, while attributes without a bang apply only to whatever immediately follows
+
+## Copy and clone types
+* If you want to modify the data in a reference without mutating the original data, you need to "move" it somehow
+* If the data is a simple type that lives on the stack like an integer, it can be _copied_, but if it is a complex type that lives on the heap, it must be _cloned_ (basically a deep copy)
+* can do this by implementing the `Copy` and/or `Clone` traits on a struct
+* beware though that copying/cloning data can potentially be wasteful if it is done haphazardly; often it is better to keep track of references to data instead of copying the values

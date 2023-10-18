@@ -1,7 +1,7 @@
 use std::net::TcpListener;
-use std::io::Read;
-use crate::http::Request; // crate keyword refers to the "root" of the module
-// use std::convert::TryFrom;
+use std::io::{Write, Read};
+use crate::http::status_code::StatusCode;
+use crate::http::{Request, Response}; // crate keyword refers to the "root" of the module
 
 // a struct that holds data about the server
 pub struct Server {
@@ -31,13 +31,23 @@ impl Server {
                     let mut buffer = [0; 1024];
                     match stream.read(&mut buffer) {
                         Ok(_) => {
-                            // convert the [u8] buffer to a string and print
-                            let request_str = String::from_utf8_lossy(&buffer);
-                            match Request::try_from(&buffer[..]) {
+                            // convert the [u8] buffer to a request struct (see the TryFrom impl)
+                            let response = match Request::try_from(&buffer[..]) {
                                 Ok(request) => {
                                     dbg!(request);
+                                    Response::new(
+                                        StatusCode::Ok,
+                                        Option::Some(String::from("<h1>It works!</h1>"))
+                                    )
                                 },
-                                Err(e) => println!("Failed to parse a request {}", e)
+                                Err(e) => {
+                                    println!("Failed to parse a request {}", e);
+                                    // create response for failed requests
+                                    Response::new(StatusCode::BadRequest, Option::None)
+                                }
+                            };
+                            if let Err(e) = response.send(&mut stream) {
+                                println!("Failed to send response: {}", e);
                             }
                         },
                         // if there's an error, log it, but don't panic

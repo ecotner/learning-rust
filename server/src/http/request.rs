@@ -53,6 +53,7 @@ impl<'buf> TryFrom<&'buf [u8]> for Request<'buf> {
     }
 }
 
+/// Iteratively parse request pieces by splitting on spaces or newlines
 fn get_next_word(request: &str) -> Option<(&str, &str)> {
     for (i, c) in request.chars().enumerate() {
         if c == ' ' || c == '\r' || c == '\n' {
