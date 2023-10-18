@@ -163,3 +163,7 @@ It will have 3 components:
 * we can create a custom trait using `trait TraitName {...}`
 * in the body we put the function signatures of the methods we want implementors of the trait to implement
 * if we want a default implementation, we can put that in the body of the methods, and then trait implementations can optionally overwrite them
+
+## Environment variables
+* can use `std::env::var("VAR_NAME")` to read environment variables at _run time_
+* can use `env!("VAR_NAME")` to read environment variables at _compile time_

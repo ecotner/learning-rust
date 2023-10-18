@@ -15,9 +15,16 @@ pub struct Request<'buf> {
 }
 
 impl<'buf> Request<'buf> {
-    // an associated function (aka static method) to create a Request form a byte array
-    fn from_byte_array(buf: &[u8]) -> Result<Self, ParseError> {
-        unimplemented!();
+    pub fn path(&self) -> &str {
+        &self.path
+    }
+
+    pub fn method(&self) -> &Method {
+        &self.method
+    }
+    
+    pub fn query_string(&self) -> Option<&QueryString> {
+        self.query_string.as_ref() // as_ref converts from &Option<T> to Option<&T>
     }
 }
 
