@@ -15,7 +15,9 @@ impl WebsiteHandler {
 
     fn read_file(&self, file_path: &str) -> Option<String> {
         let path = format!("{}/{}", self.public_path, file_path);
-        // need to verify that the client isn't requesting files outside the public path
+        // need to verify that the client isn't requesting files outside the public path.
+        // compare "canonical" (aka "absolute") path and confirm that it starts with the
+        // public path. otherwise return 404
         match fs::canonicalize(path) {
             Ok(path) => {
                 if path.starts_with(&self.public_path) {
@@ -31,8 +33,8 @@ impl WebsiteHandler {
 }
 
 impl Handler for WebsiteHandler {
+    /// Handles a request from client and returns appropriate response
     fn handle_request(&mut self, request: &Request) -> Response {
-        // Response::new(StatusCode::Ok, Some("<h1>TEST</h1>".to_string()))
         match request.method() {
             Method::GET => match request.path() {
                 "/" => Response::new(StatusCode::Ok, self.read_file("index.html")),

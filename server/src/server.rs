@@ -3,6 +3,7 @@ use std::io::Read;
 use crate::http::status_code::StatusCode;
 use crate::http::{Request, Response, ParseError}; // crate keyword refers to the "root" of the module
 
+// custom trait for implementing request handling methods
 pub trait Handler {
     fn handle_request(&mut self, request: &Request) -> Response;
 
@@ -12,7 +13,7 @@ pub trait Handler {
     }
 }
 
-// a struct that holds data about the server
+// a struct that holds data about the server; just the binding address for now
 pub struct Server {
     addr: String,
 }
@@ -55,15 +56,16 @@ impl Server {
                                     handler.handle_bad_request(&e)
                                 }
                             };
+                            // send response back to client
                             if let Err(e) = response.send(&mut stream) {
                                 println!("Failed to send response: {}", e);
                             }
                         },
-                        // if there's an error, log it, but don't panic
+                        // if there's an error reading the stream, log it, but don't panic
                         Err(e) => println!("Failed to read from connection: {}", e)
                     }
                 },
-                // if there's an error, log it, but don't panic
+                // if there's an error listening for connections, log it, but don't panic
                 Err(e) => println!("Failed to establish a connection: {}", e),
             }           
         }

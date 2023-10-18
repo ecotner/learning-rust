@@ -14,6 +14,10 @@ pub struct Request<'buf> {
     method: Method,
 }
 
+// implements a bunch of getters; we don't ever end up using them, but
+// this is used as an example to learn about their downsides (you are
+// basically limited to returning references because returning values
+// will consume the struct)
 impl<'buf> Request<'buf> {
     pub fn path(&self) -> &str {
         &self.path
@@ -102,7 +106,7 @@ impl ParseError {
     }
 }
 
-impl Error for ParseError {} // trait for creating custom error
+impl Error for ParseError {} // implement trait for creating custom error
 
 // required to implement Display trait if Error is implemented
 impl Display for ParseError {

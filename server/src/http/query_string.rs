@@ -21,7 +21,7 @@ pub enum Value<'buf> {
 }
 
 impl<'buf> QueryString<'buf> {
-    // get the value from the query string
+    /// Get the value from the query string, if it exists
     pub fn get(&self, key: &str) -> Option<&Value> {
         self.data.get(key)
     }

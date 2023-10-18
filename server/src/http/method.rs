@@ -16,6 +16,7 @@ pub enum Method {
 impl FromStr for Method {
     type Err = MethodError;
 
+    /// Converts HTTP method strings to enum (or returns error if it can't)
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "GET" => Ok(Self::GET),
