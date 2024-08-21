@@ -5,6 +5,12 @@ pub struct Driver {
     pub id: String,
 }
 
+impl Driver {
+    pub fn hello(&self) {
+        println!("Hello {}", self.id)
+    }
+}
+
 pub struct Bundle {
     pub id: String,
 }

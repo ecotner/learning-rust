@@ -20,6 +20,7 @@ fn create_state() -> PyResult<()> {
     let state = State::new(drivers, bundles);
 
     // print some info about the state
+    state.drivers.get("driver-123").unwrap().hello();
     println!("State contains the following drivers:");
     for driver in state.drivers.values() {
         println!("{}", (*driver).id);
