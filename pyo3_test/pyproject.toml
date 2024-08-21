@@ -20,3 +20,10 @@ authors = ["Eric Cotner <2.71828cotner@gmail.com>"]
 description = ""
 name = "pyo3_test"
 version = "0.0.1"
+
+[tool.poetry.dependencies]
+python = ">=3.8"
+
+[tool.poetry.group.dev.dependencies]
+maturin = "^1.7.0"
+
