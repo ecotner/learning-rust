@@ -76,7 +76,7 @@ To get it up and running, simply run `cargo run` and navigate to [http://127.0.0
 * can use an `if` statement to handle errors by using `if result.is_err() {...}`
 * this can get unweildy for more general enums or multiple comparisons, so rust has a `match` functionality that makes this easier
 * format is `match enum_var {...}`
-    * body is comma-separated list of variant names followed by code to exectute; e.g. `VarName1(v1) => {...}, VarName2(v2) => {...}`
+    * body is comma-separated list of variant names followed by code to exectute; e.g. `VarType1(v1) => {...}, VarType2(v2) => {...}`
     * the `v1/v2` refer to variables that are wrapped by the variant
     * for a `res: Result` enum in particular, we might have `match res {Ok(val) => {...}, Err(e) => {...}}`
     * use `_` to refer to a variable you don't care about
